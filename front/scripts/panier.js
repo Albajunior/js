@@ -73,10 +73,8 @@ else {
   //modification de la quantite d'un produit
   for (let i = 0; i < itemQuantity.length; i++) {
     itemQuantity[i].addEventListener('input', function () {
-      console.log(itemQuantity[i].value);
       produitpanier[i].qte = itemQuantity[i].value;
 
-      console.log(produitpanier);
       total = 0;
       for (let i = 0; i < produitpanier.length; i++) {
         let prixtotalprduit = produitpanier[i].prixp * produitpanier[i].qte;
