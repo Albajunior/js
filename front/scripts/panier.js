@@ -130,19 +130,11 @@ function validation() {
     alert('impossible de commander, Votre panier est vide');
   } else {
 
-  
-
-    // document.location.href = "confirmation.html";
-
-    const firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
-    const lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
-    const addressErrorMsg = document.getElementById('addressErrorMsg');
-    const cityErrorMsg = document.getElementById('cityErrorMsg');
-    const emailErrorMsg = document.getElementById('emailErrorMsg');
-
-
-
-
+    let firstName = document.querySelector('#firstName').value;
+    let lastName = document.querySelector('#lastName').value;
+    let address = document.querySelector('#address').value;
+    let city = document.querySelector('#city').value;
+    let email = document.querySelector('#email').value;
 
     //Si les donnes saisis sont valides , on envoi les donnees saisi et on affiche la paage confirmation 
     controlePrenom();
@@ -150,37 +142,36 @@ function validation() {
     controleNom();
     controleVille();
     controleEmail();
-    console.log(controlePrenom());
-    console.log(controleEmail());
-    if (controlePrenom(1) && controleNom(1) && controleAdress(1) && controleVille(1) ) {
 
+    if (controlePrenom(1) && controleNom(1) && controleAdress(1) && controleVille(1) && controleEmail(1)) {
+      //       //envoi de donnees dans une api   
+      const contact = {
+        firstNamee: firstName,
+        lastNamee: lastName,
+        addresse: address,
+        citye: city,
+        emaile: email,
+      };
 
-
-      //document.location.href = "product.html";
-      console.log('excellent');
-      document.location.href = "confirmation.html";
-
-      //envoi de donnees dans une api   
-      // const contact = {
-      // firstName: firstName,
-      // lastName: lastName,
-      // address:address,
-      // city: city,
-      // email:email,
-      // };
-      // const promise01 = fetch("http://localhost:3000/api/products",{
-      // method: "POST",
-      // body: JSON.stringify(contact),
-      // headers: {
-      // "Content-Type": "application/json", }
-      // }); 
-
-    } else {
-      console.log('by')
+      fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(contact)
+      })
+      .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+        }).then(function (value) {  
+      });
     }
   }
-
 }
+
+
 
 function calculate() {
   for (let i = 0; i < produitpanier.length; i++) {
@@ -196,75 +187,75 @@ function calculate() {
 
 
 calculate();
-  //   //controle prenom
+//   //controle prenom
 function controlePrenom(a) {
-    var a = 0;
-    let firstName = document.querySelector('#firstName').value;
-    if (/^[a-zA-Z]{3,20}$/.test(firstName)) {
-      firstNameErrorMsg.innerHTML="";
-      a = 1;
-      return a;
-    } else {
-      document.querySelector('#firstName').value = "";
-      firstNameErrorMsg.innerHTML="Invalide";
-      
-    };
+  var a = 0;
+  let firstName = document.querySelector('#firstName').value;
+  if (/^[a-zA-Z]{3,20}$/.test(firstName)) {
+    firstNameErrorMsg.innerHTML = "";
+    a = 1;
+    return a;
+  } else {
+    document.querySelector('#firstName').value = "";
+    firstNameErrorMsg.innerHTML = "Invalide";
+
+  };
 }
 
-  //   //controle prenom
+//   //controle prenom
 function controleNom(b) {
-    var b = 0;
-    let lastName = document.querySelector('#lastName').value;
-    if (/^[a-zA-Z]{3,20}$/.test(lastName)) {
-      lastNameErrorMsg.innerHTML=""
-      b = 1;
-      return b;
-    } else {
-      document.querySelector('#lastName').value = "";
-      lastNameErrorMsg.innerHTML="Nom incorrect"
-     
-    }
+  var b = 0;
+  let lastName = document.querySelector('#lastName').value;
+  if (/^[a-zA-Z]{3,20}$/.test(lastName)) {
+    lastNameErrorMsg.innerHTML = ""
+    b = 1;
+    return b;
+  } else {
+    document.querySelector('#lastName').value = "";
+    lastNameErrorMsg.innerHTML = "Nom incorrect"
+
+  }
 }
 
-  //   //controle adresse
-  function controleAdress(c) {
-    let address = document.querySelector('#address').value;
-    var c = 0;
-    if (/^[0-9]{1,3}[a-zA-Z0-9 ]{10,50}$/.test(address)) {
-      addressErrorMsg.innerHTML=""
-      c = 1;
-      return c;
-    } else {
-      document.querySelector('#address').value = "";
-      addressErrorMsg.innerHTML="Adress non valide"
-    }
+//   //controle adresse
+function controleAdress(c) {
+  let address = document.querySelector('#address').value;
+  var c = 0;
+  if (/^[0-9]{1,3}[a-zA-Z0-9 ]{10,50}$/.test(address)) {
+    addressErrorMsg.innerHTML = ""
+    c = 1;
+    return c;
+  } else {
+    document.querySelector('#address').value = "";
+    addressErrorMsg.innerHTML = "Adress non valide"
   }
+}
 
-  //controle ville
-  function controleVille(d) {
-    var d = 0;
-    let city = document.querySelector('#city').value;
-    if (/[a-zA-Z]{3,38}$/.test(city)) {
-      d = 1;
-      return d;
-    } else {
-      document.querySelector('#city').value = "";
-     
-    }
-  }
+//controle ville
+function controleVille(d) {
+  var d = 0;
+  let city = document.querySelector('#city').value;
+  if (/[a-zA-Z]{3,38}$/.test(city)) {
+    d = 1;
+    return d;
+  } else {
+    document.querySelector('#city').value = "";
 
-  //   //controle email
-  function controleEmail(e) {
-    var e = 0;
-    let email = document.querySelector('#email').value;
-    if (/^[A-Za-z0-9_-]+@\w+\.[a-z]+$/.test(email)) {
-      e = 1;
-      return e;
-    } else {
-      document.querySelector('#email').value = "";
-      
-    };
   }
+}
+
+//   //controle email
+function controleEmail(e) {
+  var e = 0;
+  let email = document.querySelector('#email').value;
+  if (/^[A-Za-z0-9_-]+@\w+\.[a-z]+$/.test(email)) {
+    e = 1;
+    return e;
+  } else {
+    document.querySelector('#email').value = "";
+
+  };
+}
 
 
 
