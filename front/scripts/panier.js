@@ -151,6 +151,8 @@ function validation() {
         emaile: email,
       };
 
+      sessionStorage.clear();
+      
       fetch("http://localhost:3000/api/products/order", {
         method: "POST",
         headers: {

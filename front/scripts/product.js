@@ -28,7 +28,7 @@ function getArticles() {
 
     }).catch((error) => {
       alert("Error. Veuillez lancé le serveur local (Port 3000) ? Si le problème persiste, contactez-nous.");
-      document.location.href = "index.html";
+      document.location.href = "product.html";
     }).then(function (data) {
       n = [data];
       // on affiche les couleurs du produit
