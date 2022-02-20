@@ -1,3 +1,5 @@
+let numero_commande_id = sessionStorage.getItem("orderId");
+
 function random(min, max){
     return Math.round(Math.random() * (max - min) + min)
 }

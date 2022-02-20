@@ -10,11 +10,8 @@ const descriptions = document.getElementsByClassName('productDescription');
 let url = 'http://localhost:3000/api/products';
 
 //fetch sur l'api 
-main();
+getArticles();
 
-function main() {
-  getArticles();
-}
 
 function getArticles() {
   fetch(url)

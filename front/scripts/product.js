@@ -71,6 +71,7 @@ function panier() {
       qte: quantity.value,
       colorp: currency_one,
       lien: n[0].imageUrl,
+      _id: idproduit,
     }
 
     let produitpanier = JSON.parse(sessionStorage.getItem('produit'));
