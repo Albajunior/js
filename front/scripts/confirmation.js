@@ -1,9 +1,11 @@
-let numero_commande_id = sessionStorage.getItem("orderId");
 
-function random(min, max){
-    return Math.round(Math.random() * (max - min) + min)
-}
-var numero_commande =random(1230000000768, 9087654321009);
-const orderId = document.getElementById('orderId');
 
-orderId.innerHTML = numero_commande;
+//on recupere l'id stocker dans le lien
+const idproduit_url = window.location.search;
+const urlParam = new URLSearchParams(idproduit_url);
+const idproduit = urlParam.get("id");
+
+const order = document.getElementById('orderId');
+
+order.innerHTML = idproduit;
+

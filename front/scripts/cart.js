@@ -1,12 +1,4 @@
 
-// document.querySelector('#firstName').value = "";
-// document.querySelector('#lastName').value = "";
-// document.querySelector('#address').value = "";
-// document.querySelector('#city').value = "";
-// document.querySelector('#email').value = "";
-
-//let copyOfLS = JSON.parse(localStorage.getItem("products"));
-
 //on recupere les produit stocker dans le storage dans produit panier
 let produitpanier = JSON.parse(sessionStorage.getItem('produit'));
 
@@ -119,7 +111,6 @@ else {
 
       produitpanier = sessionStorage.setItem('produit', JSON.stringify(tab));
       document.location.href = "cart.html";
-
     });
   };
 
@@ -127,22 +118,19 @@ else {
 
 //fonction du bouton valider commande 
 
-function validation() {
+document.getElementById('btnform').addEventListener('click', function (e){
 
   if (produitpanier == null || produitpanier.length == 0) {
     alert('impossible de commander, Votre panier est vide');
-  } else {
-    let tabid = [];
-    for (m = 0; m < produitpanier.length; m++) {
-      tabid[m] = produitpanier[m]._id;
-    }
-
+  }else {
+    
     let firstName = document.querySelector('#firstName').value;
     let lastName = document.querySelector('#lastName').value;
     let address = document.querySelector('#address').value;
     let city = document.querySelector('#city').value;
     let email = document.querySelector('#email').value;
 
+    e.preventDefault();
     //Si les donnes saisis sont valides , on envoi les donnees saisi et on affiche la paage confirmation 
     controlePrenom();
     controleAdress();
@@ -150,12 +138,16 @@ function validation() {
     controlePrenom();
     controleEmail();
 
-    if (controlePrenom(1) && controleNom(1) && controleAdress(1) && controleVille(1) ){
+    if (controlePrenom(1) && controleNom(1) && controleAdress(1) && controleVille(1) && controleEmail(1) ){
        
-
-      let productsBought = [];
-      productsBought.push(tabid);
-      const order = {
+   
+    let idproducts = [];
+    for (m = 0; m < produitpanier.length; m++) {
+      idproducts[m] = produitpanier[m]._id;
+    }
+    console.log(idproducts);
+     
+    const order = {
         contact: {
           firstName: firstName,
           lastName: lastName,
@@ -163,33 +155,37 @@ function validation() {
           address: address,
           email: email,
         },
-        products: productsBought,
-      };
+        products: idproducts,
+    };
+    console.log(order);
 
-    
-  
       // // -------  Envoi de la requête POST au back-end --------
       // // Création de l'entête de la requête
-      const options = {
-        method: "POST",
-        body: JSON.stringify(order),
-        headers: { "Content-Type": "application/json" },
-      };
+    const options = {
+      method: "POST",
+      body: JSON.stringify(order),
+      headers: { 
+        'Accept': 'application/json',
+        "Content-Type": "application/json"
+     },
+    };
+
+    console.log(options);
 
       // // Envoie de la requête avec l'en-tête. on garde orderId
       fetch("http://localhost:3000/api/products/order", options)
         .then((response) => response.json())
         .then((data) => {
-         sessionStorage.clear('produit')
-          sessionStorage.setItem("orderId", data.orderId);        
+        // sessionStorage.clear('produit')
+         console.log(data.orderId); 
+         document.location.href =`confirmation.html?id=${data.orderId}`;
         })
         .catch((err) => {
-          alert("Il y a eu une erreur : " + err);
+          alert("Il y a eu une erreur : " + err.message);
         });
     }  
   }
-}
-
+});
 
 function calculate() {
   for (let i = 0; i < produitpanier.length; i++) {
@@ -245,7 +241,7 @@ function controleAdress(c) {
     return c;
   } else {
     document.querySelector('#address').value = "";
-    addressErrorMsg.innerHTML = "Adress non valide"
+    addressErrorMsg.innerHTML = "Adresse non valide";
   }
 }
 
@@ -254,11 +250,12 @@ function controleVille(d) {
   var d = 0;
   let city = document.querySelector('#city').value;
   if (/[a-zA-Z]{3,38}$/.test(city)) {
+    cityErrorMsg.innerHTML = "";
     d = 1;
     return d;
   } else {
     document.querySelector('#city').value = "";
-
+    cityErrorMsg.innerHTML = "City non valide";
   }
 }
 
@@ -275,20 +272,4 @@ function controleEmail(e) {
   };
 }
 
-
- // fetch("http://localhost:3000/api/products/order", {
-      //   method: "POST",
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify(order)
-      // })
-      // .then(function (res) {
-      //     if (res.ok) {
-      //       return res.json();
-      //     }
-      //   }).then(function (value) {  
-      //     console.log(value);
-          
-      // });
 
